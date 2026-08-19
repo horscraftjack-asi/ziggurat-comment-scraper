@@ -31,7 +31,7 @@ const LOG_ROTATION = [
 ];
 
 const YOUTUBE_URL_RE =
-  /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)[a-zA-Z0-9_-]{11}/;
+  /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/\n\s]+\/\S+\/|(?:v|e(?:mbed)?|shorts|live)\/|\S*?[?&]v=)|youtu\.be\/)[a-zA-Z0-9_-]{11}/;
 
 function isLikelyYouTubeUrl(raw: string): boolean {
   const trimmed = raw.trim();
