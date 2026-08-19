@@ -55,13 +55,13 @@ CORS(app, resources={r"/*": {"origins": _origins}})
 
 def extract_video_id(url_or_id):
     """
-    Extracts the 11-character YouTube video ID from a standard/short/embed URL,
-    or returns it directly if it's already just the ID.
+    Extracts the 11-character YouTube video ID from a standard watch, youtu.be,
+    embed, /shorts/ or /live/ URL, or returns it directly if it's already just the ID.
     """
     if len(url_or_id) == 11:
         return url_or_id
 
-    regex = r'(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})'
+    regex = r'(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?|shorts|live)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})'
     match = re.search(regex, url_or_id)
     if match:
         return match.group(1)
