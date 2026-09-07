@@ -109,6 +109,25 @@ def build_prompt(purpose_cfg, client_cfg, normalised_rows, provenance, scope,
         f"```json\n{_json_dump(normalised_rows)}\n```"
     )
 
+    # Restate the output contract LAST. The schema section above is hundreds of thousands of
+    # characters upstream of the generation point once a transcript + a large comment set are
+    # appended, and compliance became stochastic at that distance: of the first three live runs
+    # (585K-758K chars), only one emitted the marker, so `summary.json` was silently lost on the
+    # other two (_split_report_and_summary returns (report, None) on a missing marker OR a
+    # JSONDecodeError, which also destroys the evidence of which it was). Keep this section last —
+    # anything appended after it reintroduces the same distance problem.
+    sections.append(
+        "\n---\n\n## Output contract (restated — this is the last instruction before you write)\n\n"
+        "Emit **both** outputs in this single response, in this order:\n\n"
+        "1. The full Markdown report, following the active purpose's `output_structure` exactly.\n"
+        "2. A line containing only `===SUMMARY_JSON===`.\n"
+        "3. One fenced ```json block matching the §4 schema given earlier **exactly**: every array "
+        "item's identifying field is named `name`, `provenance` is a nested object copied verbatim "
+        "from the provenance block above, plus any `summary_json_extensions` the purpose defines.\n\n"
+        "Nothing after the closing code fence. Do not omit the marker or the JSON block — a report "
+        "without them is an incomplete run."
+    )
+
     return "\n".join(sections)
 
 
